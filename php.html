@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day PHP Curriculum</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom styling for aesthetics -->
+    <style>
+        /* Define the font */
+        html, body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar styling for a cleaner look */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #6366f1; /* Indigo-500 */
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #e0e7ff; /* Indigo-100 */
+        }
+        /* Style the link text */
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<!-- 1. Use h-screen and flex-col to create a fixed-height container -->
+<body class="bg-gray-50 font-sans antialiased h-screen overflow-hidden flex flex-col">
+
+    <!-- FIXED TOP HEADER -->
+    <header class="bg-white shadow-lg flex-shrink-0 border-b border-gray-200 p-4 sm:p-5 lg:p-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900">
+                Day <span id="day-number-title" class="text-indigo-600">1</span>: <span id="day-topic-title">Loading...</span>
+            </h2>
+        </div>
+    </header>
+
+    <!-- 2. MAIN CONTENT WRAPPER: Takes remaining height (flex-1) and allows internal content to scroll -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- Sidebar Navigation (Left Side) - Fixed width, full height, internal scroll -->
+        <nav id="sidebar" class="w-full sm:w-64 bg-indigo-700 text-white shadow-2xl flex-shrink-0 flex flex-col">
+            
+            <!-- Sidebar Header (Fixed within the Nav) -->
+            <div class="p-5 border-b border-indigo-600 flex-shrink-0">
+                <h1 class="text-xl font-extrabold tracking-tight">PHP 30-Day Plan</h1>
+                <p class="text-xs text-indigo-200 mt-1">Select a day to view details</p>
+            </div>
+            
+            <!-- Navigation Links (Scrollable area) -->
+            <div id="nav-links-container" class="custom-scroll overflow-y-auto flex-1 pb-4">
+                <!-- Navigation links will be injected here by JavaScript -->
+            </div>
+        </nav>
+
+        <!-- Main Content Area (Right Side) - Takes remaining space, internal scroll -->
+        <main id="main-content" class="flex-grow custom-scroll overflow-y-auto p-6 sm:p-10 lg:p-12">
+
+            <!-- Content Container -->
+            <div class="max-w-4xl mx-auto">
+                
+                <div id="loading-indicator" class="hidden text-center p-8">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500 mx-auto"></div>
+                    <p class="mt-3 text-gray-600">Loading details...</p>
+                </div>
+
+                <!-- Content Area -->
+                <div id="content-display" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200">
+
+                    <!-- Main Topic -->
+                    <section class="mb-8">
+                        <h3 class="text-xl sm:text-2xl font-semibold text-indigo-600 mb-3 border-b pb-2">Main Concepts (Click to Learn)</h3>
+                        <div id="main-concepts" class="text-gray-700 leading-relaxed">
+                            <!-- Structured concepts content will be injected here -->
+                        </div>
+                    </section>
+
+                    <!-- Mini Project -->
+                    <section>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-green-600 mb-3 border-b pb-2">Mini-Project Challenge</h3>
+                        <p id="mini-project" class="text-gray-700 leading-relaxed font-medium">
+                            <!-- Project content will be injected here -->
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- CURRICULUM DATA (PHP Focus) ---
+        const curriculum = [
+            { 
+                day: 1, 
+                topic: "Setup, Syntax & Output", 
+                concepts: [
+                    { main: "Local Development Environment Setup", subTopics: [
+                        { text: "Installation of XAMPP, MAMP, or Docker for local server environment.", url: "https://www.apachefriends.org/index.html" },
+                        { text: "Understanding the document root (e.g., htdocs) for serving PHP files.", url: "https://www.php.net/manual/en/install.setup.php" }
+                    ]},
+                    { main: "Basic PHP Syntax", subTopics: [
+                        { text: "Opening and closing PHP tags (`<?php ... ?>`).", url: "https://www.php.net/manual/en/language.basic-syntax.phptags.php" },
+                        { text: "Statements and the importance of semicolons (`;`).", url: "https://www.w3schools.com/php/php_syntax.asp" }
+                    ]},
+                    { main: "Outputting Content", subTopics: [
+                        { text: "Using `echo` and `print` to send content to the browser.", url: "https://www.php.net/manual/en/function.echo.php" },
+                        { text: "Embedding PHP within HTML and vice versa.", url: "https://www.php.net/manual/en/tutorial.firstpage.php" }
+                    ]}
+                ], 
+                project: "Print **Server Information**: Write a script that uses `echo` to print a custom greeting (e.g., 'Welcome to my PHP Page!') followed by the current PHP version number using the `phpversion()` function." 
+            },
+            { 
+                day: 2, 
+                topic: "Variables & Data Types", 
+                concepts: [
+                    { main: "Variable Declaration", subTopics: [
+                        { text: "All variables must start with a dollar sign (`$`).", url: "https://www.php.net/manual/en/language.variables.basics.php" },
+                        { text: "Variable naming rules and conventions (case-sensitivity).", url: "https://www.w3schools.com/php/php_variables.asp" }
+                    ]},
+                    { main: "Scalar Data Types", subTopics: [
+                        { text: "Understanding `string`, `integer`, `float` (doubles), and `boolean` types.", url: "https://www.php.net/manual/en/language.types.php" },
+                        { text: "Inspecting variable contents and type using `var_dump()`.", url: "https://www.php.net/manual/en/function.var-dump.php" }
+                    ]},
+                    { main: "Constants", subTopics: [
+                        { text: "Defining non-changeable values using the `define()` function.", url: "https://www.php.net/manual/en/language.constants.php" }
+                    ]}
+                ], 
+                project: "Create a **Personal Stats** section: Define variables for your name (string), current year of birth (int), and height in meters (float). Display all variables on the page. Then, use `var_dump()` for the height variable." 
+            },
+            { 
+                day: 3, 
+                topic: "Operators & Type Juggling", 
+                concepts: [
+                    { main: "Arithmetic Operators", subTopics: [
+                        { text: "Addition (+), subtraction (-), multiplication (*), division (/), modulus (%), and exponentiation (**).", url: "https://www.w3schools.com/php/php_operators_arithmetic.asp" },
+                        { text: "Assignment operators (`=`, `+=`, `-=`, etc.).", url: "https://www.php.net/manual/en/language.operators.assignment.php" }
+                    ]},
+                    { main: "String and Type Juggling", subTopics: [
+                        { text: "Concatenation operator (`.`) for joining strings.", url: "https://www.w3schools.com/php/php_operators_string.asp" },
+                        { text: "Automatic type conversion (juggling) and when it occurs.", url: "https://www.php.net/manual/en/language.types.type-juggling.php" }
+                    ]},
+                    { main: "Comparison Operators", subTopics: [
+                        { text: "Equal (`==`) vs. Identical (`===`) — understanding value vs. value and type comparison.", url: "https://www.w3schools.com/php/php_operators_comparison.asp" }
+                    ]}
+                ], 
+                project: "Build a **Simple VAT Calculator**: Define a price variable (\$150.00) and a VAT rate constant (0.20). Calculate the VAT amount and the final total price. Display the original price, VAT amount, and final price." 
+            },
+            { 
+                day: 4, 
+                topic: "Conditional Logic: if, else, elseif", 
+                concepts: [
+                    { main: "The `if` Statement", subTopics: [
+                        { text: "Executing code only when a condition evaluates to `true`.", url: "https://www.w3schools.com/php/php_if_else.asp" },
+                        { text: "Understanding truthy and falsy values in PHP.", url: "https://www.php.net/manual/en/language.types.boolean.php" }
+                    ]},
+                    { main: "`else` and `elseif`", subTopics: [
+                        { text: "Using `else` for fallback code.", url: "https://www.w3schools.com/php/php_if_else.asp" },
+                        { text: "Using `elseif` to check multiple, sequential conditions.", url: "https://www.php.net/manual/en/control-structures.elseif.php" }
+                    ]},
+                    { main: "Logical Operators & Ternary", subTopics: [
+                        { text: "Combining conditions with AND (`&&` or `and`) and OR (`||` or `or`).", url: "https://www.w3schools.com/php/php_operators_logical.asp" },
+                        { text: "Introduction to the shorthand ternary operator (`? :`).", url: "https://www.php.net/manual/en/language.operators.comparison.php#language.operators.comparison.ternary" }
+                    ]}
+                ], 
+                project: "Write a **Time-of-Day Greeter**: Get the current hour (e.g., using `date('H')`). Use `if/elseif/else` to print 'Good Morning' (5:00-11:59), 'Good Afternoon' (12:00-17:59), or 'Good Evening' otherwise." 
+            },
+            { 
+                day: 5, 
+                topic: "Loops: while, for, foreach", 
+                concepts: [
+                    { main: "`while` and `do-while` Loops", subTopics: [
+                        { text: "Using `while` to repeat code as long as a condition is true.", url: "https://www.w3schools.com/php/php_loop_while.asp" },
+                        { text: "`do-while` loops (guaranteed to run at least once).", url: "https://www.php.net/manual/en/control-structures.do.while.php" }
+                    ]},
+                    { main: "`for` Loops", subTopics: [
+                        { text: "The three parts of a `for` loop: initialization, condition, and increment.", url: "https://www.w3schools.com/php/php_loop_for.asp" },
+                        { text: "Iterating a specific number of times.", url: "https://www.php.net/manual/en/control-structures.for.php" }
+                    ]},
+                    { main: "Controlling Loops", subTopics: [
+                        { text: "Using `break` to exit a loop instantly.", url: "https://www.w3schools.com/php/php_break.asp" },
+                        { text: "Using `continue` to skip the rest of the current iteration.", url: "https://www.php.net/manual/en/control-structures.continue.php" }
+                    ]}
+                ], 
+                project: "Create a **Multiplication Grid**: Use a **nested `for` loop** to print a simple multiplication table (e.g., $1 \times 1$ up to $5 \times 5$) inside an HTML table structure." 
+            },
+            { 
+                day: 6, 
+                topic: "Arrays: Indexed and Associative", 
+                concepts: [
+                    { main: "Indexed Arrays", subTopics: [
+                        { text: "Creating a list of items using `array()` or square brackets `[]`.", url: "https://www.php.net/manual/en/language.types.array.php" },
+                        { text: "Accessing elements using numerical keys (starting from 0).", url: "https://www.w3schools.com/php/php_arrays_indexed.asp" }
+                    ]},
+                    { main: "Associative Arrays", subTopics: [
+                        { text: "Creating key-value pairs (`'key' => 'value'`).", url: "https://www.w3schools.com/php/php_arrays_associative.asp" },
+                        { text: "Accessing values using string keys.", url: "https://www.php.net/manual/en/language.types.array.php" }
+                    ]},
+                    { main: "Debugging Arrays", subTopics: [
+                        { text: "Using `print_r()` and `<pre>` tags to display array structure clearly.", url: "https://www.php.net/manual/en/function.print-r.php" }
+                    ]}
+                ], 
+                project: "Build a **Product Catalog**: Create an associative array where keys are product IDs (e.g., 'P101') and values are product names (e.g., 'Laptop'). Add a new item and then print the entire array using `print_r()`." 
+            },
+            { 
+                day: 7, 
+                topic: "Array Functions & Iteration", 
+                concepts: [
+                    { main: "The `foreach` Loop", subTopics: [
+                        { text: "The primary way to iterate over arrays, accessing only values (`as \$value`).", url: "https://www.w3schools.com/php/php_loop_foreach.asp" },
+                        { text: "Accessing both key and value simultaneously (`as \$key => \$value`).", url: "https://www.php.net/manual/en/control-structures.foreach.php" }
+                    ]},
+                    { main: "Essential Array Manipulation", subTopics: [
+                        { text: "Adding to the end with `array_push()` (or `[]` shorthand).", url: "https://www.php.net/manual/en/function.array-push.php" },
+                        { text: "Checking existence with `isset()` and `array_key_exists()`.", url: "https://www.w3schools.com/php/func_array_key_exists.asp" }
+                    ]},
+                    { main: "Array Sorting", subTopics: [
+                        { text: "Simple sorting with `sort()` (indexed) and `asort()` (associative by value).", url: "https://www.w3schools.com/php/php_arrays_sort.asp" }
+                    ]}
+                ], 
+                project: "Develop a **User Role List**: Create an array of usernames. Use the **`foreach`** loop to print each username, adding ' (Admin)' next to any name that starts with the letter 'A' using conditional logic." 
+            },
+            { 
+                day: 8, 
+                topic: "Functions (Custom & Built-in)", 
+                concepts: [
+                    { main: "Defining and Calling Functions", subTopics: [
+                        { text: "Creating a reusable block of code using the `function` keyword.", url: "https://www.w3schools.com/php/php_functions.asp" },
+                        { text: "The importance of function naming conventions (snake_case is common).", url: "https://www.php.net/manual/en/functions.user-defined.php" }
+                    ]},
+                    { main: "Parameters, Arguments, and Return", subTopics: [
+                        { text: "Passing inputs (arguments) and defining a value to send back using `return`.", url: "https://www.w3schools.com/php/php_functions_parameter.asp" },
+                        { text: "Setting default values for optional parameters.", url: "https://www.php.net/manual/en/functions.arguments.php#functions.arguments.default" }
+                    ]},
+                    { main: "Variable Scope", subTopics: [
+                        { text: "Understanding local vs. global variables and the `global` keyword.", url: "https://www.w3schools.com/php/php_variables_scope.asp" }
+                    ]}
+                ], 
+                project: "Write a **BMI Calculator Function**: Write a function `calculateBMI(\$weight, \$height)` that takes two floats and returns the calculated BMI. Call the function and print the result, formatted to two decimal places." 
+            },
+            { 
+                day: 9, 
+                topic: "The Switch Statement & Forms (GET)", 
+                concepts: [
+                    { main: "The `switch` Statement", subTopics: [
+                        { text: "Using `switch` for multiple `if/elseif` checks on a single variable's value.", url: "https://www.w3schools.com/php/php_switch.asp" },
+                        { text: "The importance of the `break` keyword within `case` blocks.", url: "https://www.php.net/manual/en/control-structures.switch.php" }
+                    ]},
+                    { main: "HTML Forms and GET Requests", subTopics: [
+                        { text: "Creating basic HTML forms with `method=\"GET\"`.", url: "https://www.w3schools.com/html/html_forms.asp" },
+                        { text: "Accessing form data using the `\$_GET` superglobal array.", url: "https://www.w3schools.com/php/php_superglobals_get.asp" }
+                    ]},
+                    { main: "Basic Input Validation", subTopics: [
+                        { text: "Checking if a variable is set using `isset()` before processing.", url: "https://www.php.net/manual/en/function.isset.php" }
+                    ]}
+                ], 
+                project: "Create a **Day of the Week Messenger**: Create a variable with a number 1-7. Use a **`switch`** statement to print the corresponding day name (e.g., 1 is 'Monday')." 
+            },
+            { 
+                day: 10, 
+                topic: "Superglobals & POST Requests", 
+                concepts: [
+                    { main: "The `\$_POST` Superglobal", subTopics: [
+                        { text: "Handling data from HTML forms sent with `method=\"POST\"`.", url: "https://www.w3schools.com/php/php_superglobals_post.asp" },
+                        { text: "When to use `POST` (sensitive data, large data) over `GET` (simple navigation/queries).", url: "https://www.php.net/manual/en/reserved.variables.post.php" }
+                    ]},
+                    { main: "Introduction to Superglobals", subTopics: [
+                        { text: "Overview of global, built-in arrays: `\$_SERVER`, `\$_REQUEST`, `\$_FILES`, etc.", url: "https://www.w3schools.com/php/php_superglobals.asp" },
+                        { text: "Using `\$_SERVER['REQUEST_METHOD']` for form submission control.", url: "https://www.php.net/manual/en/reserved.variables.server.php" }
+                    ]},
+                    { main: "Basic Security: `htmlspecialchars()`", subTopics: [
+                        { text: "Protecting output from Cross-Site Scripting (XSS) by encoding special characters.", url: "https://www.w3schools.com/php/func_string_htmlspecialchars.asp" }
+                    ]}
+                ], 
+                project: "Create a **Simple Login Form**: Create an HTML form with `method=\"POST\"` for 'username' and 'password'. When submitted, PHP processes the data using `\$_POST`. If the username is 'admin' and password is '123', echo 'Access Granted', otherwise 'Access Denied'." 
+            },
+            { 
+                day: 11, 
+                topic: "Working with Files (Read/Write)", 
+                concepts: [
+                    { main: "File Handling Basics", subTopics: [
+                        { text: "Using `fopen()` to open a file and `fclose()` to close it.", url: "https://www.w3schools.com/php/php_file_open.asp" },
+                        { text: "Understanding file modes: 'r' (read), 'w' (write/overwrite), 'a' (append).", url: "https://www.php.net/manual/en/function.fopen.php" }
+                    ]},
+                    { main: "Reading Files", subTopics: [
+                        { text: "Reading the entire file content with `file_get_contents()`.", url: "https://www.php.net/manual/en/function.file-get-contents.php" },
+                        { text: "Reading files line by line using `fgets()`.", url: "https://www.w3schools.com/php/func_filesystem_fgets.asp" }
+                    ]},
+                    { main: "Writing Files", subTopics: [
+                        { text: "Writing data to a file using `file_put_contents()` for simple writes.", url: "https://www.php.net/manual/en/function.file-put-contents.php" },
+                        { text: "Using `fwrite()` after opening a file in 'w' or 'a' mode.", url: "https://www.w3schools.com/php/php_file_create.asp" }
+                    ]}
+                ], 
+                project: "Write a **Simple Log Creator**: Write a script that checks if a file named `log.txt` exists. If it does, append the current date/time (use `date()`) and 'New Entry' to it. If not, create the file and add the first entry." 
+            },
+            { 
+                day: 12, 
+                topic: "Including Files & Code Organization", 
+                concepts: [
+                    { main: "File Inclusion Statements", subTopics: [
+                        { text: "Using `include` and `require` to insert one PHP file into another.", url: "https://www.w3schools.com/php/php_includes.asp" },
+                        { text: "The difference in error handling between `include` and `require`.", url: "https://www.php.net/manual/en/function.include.php" }
+                    ]},
+                    { main: "`_once` Variants", subTopics: [
+                        { text: "Using `include_once` and `require_once` to prevent accidental multiple inclusions.", url: "https://www.w3schools.com/php/php_file_include_once.asp" }
+                    ]},
+                    { main: "Code Structure", subTopics: [
+                        { text: "Organizing an application with separate files for header, footer, and configuration.", url: "https://www.w3schools.com/php/php_file_include.asp" }
+                    ]}
+                ], 
+                project: "Build a **Modular Page**: Create three files: `header.php` (contains HTML opening and page title), `footer.php` (contains HTML closing and copyright), and `index.php`. Use **`require_once`** in `index.php` to build the complete HTML page." 
+            },
+            // --- DAYS 13-30 ---
+            { 
+                day: 13, 
+                topic: "Session Management", 
+                concepts: [
+                    { main: "Starting a Session", subTopics: [
+                        { text: "Using `session_start()` at the very top of the script.", url: "https://www.w3schools.com/php/php_sessions.asp" },
+                        { text: "Understanding sessions for maintaining state across multiple pages.", url: "https://www.php.net/manual/en/intro.session.php" }
+                    ]},
+                    { main: "The `\$_SESSION` Superglobal", subTopics: [
+                        { text: "Storing and retrieving user-specific data in the `\$_SESSION` array.", url: "https://www.php.net/manual/en/reserved.variables.session.php" },
+                        { text: "Checking if a session variable exists using `isset()`.", url: "https://www.w3schools.com/php/php_sessions.asp" }
+                    ]},
+                    { main: "Destroying Sessions", subTopics: [
+                        { text: "Unsetting session variables with `unset()` and destroying the entire session with `session_destroy()`.", url: "https://www.w3schools.com/php/php_sessions_destroy.asp" }
+                    ]}
+                ], 
+                project: "Create a **Visitor Counter** script that uses `\$_SESSION` to store and increment the number of times a user has refreshed the page during a single browser session. Display the count." 
+            },
+            { 
+                day: 14, 
+                topic: "Cookies", 
+                concepts: [
+                    { main: "Setting a Cookie", subTopics: [
+                        { text: "Using `setcookie()` to send a cookie to the client browser (must be called before any output).", url: "https://www.w3schools.com/php/php_cookies.asp" },
+                        { text: "Defining the cookie name, value, and expiration time.", url: "https://www.php.net/manual/en/function.setcookie.php" }
+                    ]},
+                    { main: "Reading and Deleting Cookies", subTopics: [
+                        { text: "Accessing cookie data using the `\$_COOKIE` superglobal array.", url: "https://www.php.net/manual/en/reserved.variables.cookie.php" },
+                        { text: "Deleting a cookie by setting its expiration time to a point in the past.", url: "https://www.w3schools.com/php/php_cookies.asp" }
+                    ]},
+                    { main: "Security Flags", subTopics: [
+                        { text: "Introduction to `HttpOnly` and `Secure` flags for enhanced cookie security.", url: "https://www.php.net/manual/en/function.setcookie.php" }
+                    ]}
+                ], 
+                project: "Create a **Theme Switcher** where a form button sets a cookie with the value 'dark' or 'light'. On page load, read the cookie using **`\$_COOKIE`** and display a message indicating the current theme." 
+            },
+            { 
+                day: 15, 
+                topic: "Introduction to OOP", 
+                concepts: [
+                    { main: "Classes and Objects", subTopics: [
+                        { text: "Defining a blueprint using the `class` keyword.", url: "https://www.w3schools.com/php/php_oop_classes_objects.asp" },
+                        { text: "Creating an instance of a class using the `new` keyword.", url: "https://www.php.net/manual/en/language.oop5.basic.php" }
+                    ]},
+                    { main: "Properties and Methods", subTopics: [
+                        { text: "Defining class variables (properties) and class functions (methods).", url: "https://www.w3schools.com/php/php_oop_properties.asp" },
+                        { text: "Accessing properties and calling methods using the object operator (`->`).", url: "https://www.php.net/manual/en/language.oop5.basic.php" }
+                    ]},
+                    { main: "Constructors", subTopics: [
+                        { text: "The magic method `__construct()` for initializing object properties upon creation.", url: "https://www.w3schools.com/php/php_oop_constructor.asp" }
+                    ]}
+                ], 
+                project: "Design a **`Book` Class** with properties `title`, `author`, and `publicationYear`. Implement a constructor and a method `getSummary()` that returns a formatted string about the book. Create two book objects." 
+            },
+            { 
+                day: 16, 
+                topic: "OOP: Inheritance", 
+                concepts: [
+                    { main: "The `extends` Keyword", subTopics: [
+                        { text: "Creating a child class that inherits properties and methods from a parent class.", url: "https://www.w3schools.com/php/php_oop_inheritance.asp" },
+                        { text: "The concept of 'Is-A' relationship (e.g., a Dog is an Animal).", url: "https://www.php.net/manual/en/language.oop5.inheritance.php" }
+                    ]},
+                    { main: "Method Overriding", subTopics: [
+                        { text: "Redefining a parent class method in the child class to change its behavior.", url: "https://www.w3schools.com/php/php_oop_inheritance.asp" },
+                        { text: "Calling the parent method from the child class using `parent::methodName()`.", url: "https://www.w3schools.com/php/php_oop_inheritance.asp" }
+                    ]},
+                    { main: "The `final` Keyword", subTopics: [
+                        { text: "Using `final` to prevent a class or method from being inherited or overridden.", url: "https://www.php.net/manual/en/language.oop5.final.php" }
+                    ]}
+                ], 
+                project: "Create a parent class **`Animal`** with a method `makeSound()`. Create a child class **`Dog`** that `extends` `Animal` and overrides `makeSound()` to print 'Woof!'. Instantiate both classes." 
+            },
+            { 
+                day: 17, 
+                topic: "OOP: Encapsulation", 
+                concepts: [
+                    { main: "Visibility Keywords", subTopics: [
+                        { text: "Understanding `public` (accessible everywhere), `protected` (accessible within the class and its children), and `private` (accessible only within the class).", url: "https://www.w3schools.com/php/php_oop_access_modifiers.asp" },
+                        { text: "The principle of hiding internal state and requiring interaction through public methods.", url: "https://www.php.net/manual/en/language.oop5.visibility.php" }
+                    ]},
+                    { main: "Setters and Getters", subTopics: [
+                        { text: "Implementing public methods (Setters) to safely modify private properties.", url: "https://www.w3schools.com/php/php_oop_set_get.asp" },
+                        { text: "Implementing public methods (Getters) to safely retrieve private properties.", url: "https://www.php.net/manual/en/language.oop5.visibility.php" }
+                    ]},
+                    { main: "Static Properties and Methods", subTopics: [
+                        { text: "Defining class members that belong to the class itself, not any specific object, using `self::`.", url: "https://www.w3schools.com/php/php_oop_static_properties.asp" }
+                    ]}
+                ], 
+                project: "Update the `Book` Class. Make the `title` property **`private`**. Implement a public `getTitle()` (getter) method and a public `setTitle(\$newTitle)` (setter) method that includes a check to ensure the title is not empty." 
+            },
+            { 
+                day: 18, 
+                topic: "OOP: Abstraction & Interfaces", 
+                concepts: [
+                    { main: "Abstract Classes", subTopics: [
+                        { text: "Defining a class that cannot be instantiated but must be inherited, using the `abstract` keyword.", url: "https://www.w3schools.com/php/php_oop_abstract.asp" },
+                        { text: "Abstract methods are defined without a body and must be implemented by the child class.", url: "https://www.php.net/manual/en/language.oop5.abstract.php" }
+                    ]},
+                    { main: "Interfaces", subTopics: [
+                        { text: "A contract defining a set of methods that a class must implement, using the `interface` keyword.", url: "https://www.w3schools.com/php/php_oop_interfaces.asp" },
+                        { text: "A class uses the `implements` keyword to adopt the contract of an interface.", url: "https://www.php.net/manual/en/language.oop5.interfaces.php" }
+                    ]},
+                    { main: "Type Hinting (Return Types & Parameters)", subTopics: [
+                        { text: "Specifying the expected data type for parameters and the returned value of a function/method.", url: "https://www.php.net/manual/en/language.types.declarations.php" }
+                    ]}
+                ], 
+                project: "Define an **`interface`** called `Loggable` with a method signature `logMessage(string \$message)`. Create a class `DatabaseLogger` that **`implements`** this interface." 
+            },
+            { 
+                day: 19, 
+                topic: "PHP & MySQL Basics", 
+                concepts: [
+                    { main: "Database Introduction", subTopics: [
+                        { text: "Understanding relational database structure (tables, columns, primary keys).", url: "https://www.w3schools.com/sql/sql_intro.asp" },
+                        { text: "Introduction to SQL (Structured Query Language) basic commands: CREATE, INSERT.", url: "https://www.w3schools.com/sql/default.asp" }
+                    ]},
+                    { main: "The Importance of PDO", subTopics: [
+                        { text: "Why PDO (PHP Data Objects) is the preferred, secure method for database access over older methods.", url: "https://www.php.net/manual/en/book.pdo.php" },
+                        { text: "Connecting to the database using the PDO constructor.", url: "https://www.w3schools.com/php/php_mysql_connect.asp" }
+                    ]},
+                    { main: "Basic Exception Handling for DB", subTopics: [
+                        { text: "Using `try...catch` blocks to handle connection errors gracefully.", url: "https://www.php.net/manual/en/pdo.error-handling.php" }
+                    ]}
+                ], 
+                project: "Set up a local MySQL database named `php_db`. Write a PHP script using **PDO** to attempt a connection. Use a `try...catch` block to print 'Connection successful!' or the error message." 
+            },
+            { 
+                day: 20, 
+                topic: "PDO: Prepared Statements (Read)", 
+                concepts: [
+                    { main: "Prepared Statements Concept", subTopics: [
+                        { text: "Understanding how prepared statements separate the SQL query structure from the data to prevent SQL injection.", url: "https://www.php.net/manual/en/pdo.prepared-statements.php" },
+                        { text: "Using the `prepare()` method on the PDO object.", url: "https://www.w3schools.com/php/php_mysql_prepared_statements.asp" }
+                    ]},
+                    { main: "Executing a SELECT Query", subTopics: [
+                        { text: "Executing the statement using `execute()` and optionally binding parameters if needed.", url: "https://www.php.net/manual/en/pdostatement.execute.php" },
+                        { text: "Fetching a single row with `fetch()` and multiple rows with `fetchAll()`.", url: "https://www.php.net/manual/en/pdostatement.fetch.php" }
+                    ]},
+                    { main: "Displaying Fetched Data", subTopics: [
+                        { text: "Looping through the result set using `foreach` and displaying data in HTML.", url: "https://www.w3schools.com/php/php_mysql_select.asp" }
+                    ]}
+                ], 
+                project: "Create a simple `products` table in your database. Write a PHP script to fetch all products using a **PDO prepared statement** and display the results in an unstyled HTML list." 
+            },
+            { 
+                day: 21, 
+                topic: "PDO: Prepared Statements (Write)", 
+                concepts: [
+                    { main: "INSERT Queries", subTopics: [
+                        { text: "Using named placeholders (e.g., `:name`) or question mark placeholders (`?`) for data.", url: "https://www.w3schools.com/php/php_mysql_insert_prepared.asp" },
+                        { text: "Binding values to placeholders using `bindParam()` or passing an array to `execute()`.", url: "https://www.php.net/manual/en/pdostatement.bindparam.php" }
+                    ]},
+                    { main: "UPDATE and DELETE Queries", subTopics: [
+                        { text: "Applying prepared statement techniques to safely modify (UPDATE) and remove (DELETE) database records.", url: "https://www.w3schools.com/php/php_mysql_update_prepared.asp" },
+                        { text: "The critical use of a `WHERE` clause in UPDATE and DELETE.", url: "https://www.w3schools.com/php/php_mysql_delete_prepared.asp" }
+                    ]},
+                    { main: "Retrieving Last Insert ID", subTopics: [
+                        { text: "Getting the auto-increment ID of the last inserted row using `\$pdo->lastInsertId()`.", url: "https://www.php.net/manual/en/pdo.lastinsertid.php" }
+                    ]}
+                ], 
+                project: "Build a simple **product submission form** (POST). When submitted, use a **PDO prepared statement with placeholders** to insert the product name and price into the `products` table. Confirm successful insertion to the user." 
+            },
+            { 
+                day: 22, 
+                topic: "Error Handling & Debugging", 
+                concepts: [
+                    { main: "PHP Error Levels", subTopics: [
+                        { text: "Understanding different error types: Notices, Warnings, Fatal Errors, and Deprecated.", url: "https://www.php.net/manual/en/errorfunc.constants.php" },
+                        { text: "Configuring error display/logging using `ini_set()` or `php.ini` (`display_errors`, `log_errors`).", url: "https://www.php.net/manual/en/function.ini-set.php" }
+                    ]},
+                    { main: "Exceptions and `try...catch`", subTopics: [
+                        { text: "Using `try...catch` blocks to manage runtime errors and prevent scripts from crashing.", url: "https://www.w3schools.com/php/php_exception.asp" },
+                        { text: "Throwing custom exceptions for validation failures.", url: "https://www.php.net/manual/en/language.exceptions.php" }
+                    ]},
+                    { main: "Debugging Tools", subTopics: [
+                        { text: "Effective use of `var_dump()` and `die()`/`exit()` for quick inspection and script halting.", url: "https://www.php.net/manual/en/function.var-dump.php" }
+                    ]}
+                ], 
+                project: "Create a function `divide(\$a, \$b)` that throws a custom `Exception` if `\$b` is 0. Call the function and wrap it in a **`try...catch`** block to print 'Cannot divide by zero!' instead of a fatal error." 
+            },
+            { 
+                day: 23, 
+                topic: "File Uploads", 
+                concepts: [
+                    { main: "The Upload Form", subTopics: [
+                        { text: "Setting the HTML form attribute: `enctype=\"multipart/form-data\"` (mandatory).", url: "https://www.w3schools.com/php/php_file_upload.asp" },
+                        { text: "Using the `max_file_size` hidden input for client-side limits.", url: "https://www.php.net/manual/en/features.file-upload.post-method.php" }
+                    ]},
+                    { main: "The `\$_FILES` Superglobal", subTopics: [
+                        { text: "Inspecting the array structure: `name`, `type`, `size`, `tmp_name`, `error`.", url: "https://www.w3schools.com/php/php_file_upload.asp" },
+                        { text: "Understanding the temporary file location (`tmp_name`).", url: "https://www.php.net/manual/en/features.file-upload.php" }
+                    ]},
+                    { main: "Moving the Uploaded File", subTopics: [
+                        { text: "Using `move_uploaded_file()` to safely relocate the file to a permanent server location.", url: "https://www.w3schools.com/php/func_filesystem_move_uploaded_file.asp" }
+                    ]}
+                ], 
+                project: "Build a simple **Image Uploader**. Accept a file upload. Check that the file type is a PNG or JPEG. If valid, rename the file with a unique ID and move it to an `images/` folder." 
+            },
+            { 
+                day: 24, 
+                topic: "Date and Time Handling", 
+                concepts: [
+                    { main: "The `date()` Function (Legacy)", subTopics: [
+                        { text: "Formatting timestamps into readable date strings (e.g., 'Y-m-d H:i:s').", url: "https://www.w3schools.com/php/func_date_date.asp" },
+                        { text: "Using `time()` to get the current Unix timestamp.", url: "https://www.php.net/manual/en/function.time.php" }
+                    ]},
+                    { main: "The `DateTime` Object (Modern OOP)", subTopics: [
+                        { text: "Instantiating the `DateTime` class for reliable and flexible date manipulation.", url: "https://www.php.net/manual/en/class.datetime.php" },
+                        { text: "Using methods like `format()`, `modify()`, and `setDate()`.", url: "https://www.w3schools.com/php/php_ref_datetime.asp" }
+                    ]},
+                    { main: "Date Intervals", subTopics: [
+                        { text: "Calculating the difference between two `DateTime` objects using `diff()` to get a `DateInterval` object.", url: "https://www.php.net/manual/en/class.dateinterval.php" }
+                    ]}
+                ], 
+                project: "Use the **`DateTime` object** to calculate and display: 1) The exact time one week from now, and 2) The number of days passed since January 1st of the current year." 
+            },
+            { 
+                day: 25, 
+                topic: "Namespaces & Autoloading", 
+                concepts: [
+                    { main: "Namespaces", subTopics: [
+                        { text: "Solving naming conflicts by grouping classes, functions, and constants under a specific name.", url: "https://www.w3schools.com/php/php_namespaces.asp" },
+                        { text: "Declaring a namespace with the `namespace` keyword and importing with `use`.", url: "https://www.php.net/manual/en/language.namespaces.definition.php" }
+                    ]},
+                    { main: "Autoloading Concept", subTopics: [
+                        { text: "The problem autoloading solves: manually including every class file using `require`.", url: "https://www.php.net/manual/en/language.oop5.autoload.php" },
+                        { text: "Introduction to the `spl_autoload_register()` function.", url: "https://www.w3schools.com/php/php_autoload.asp" }
+                    ]},
+                    { main: "PSR-4 Standard (Theory)", subTopics: [
+                        { text: "Understanding the standard file naming and folder structure convention for autoloading (essential for Composer).", url: "https://www.php-fig.org/psr/psr-4/" }
+                    ]}
+                ], 
+                project: "Create two files: `Core/User.php` with `namespace App\Core;` and `index.php`. In `index.php`, implement a basic autoloader function using `spl_autoload_register` to load the `User` class when it is instantiated." 
+            },
+            { 
+                day: 26, 
+                topic: "Composer & Package Management", 
+                concepts: [
+                    { main: "What is Composer?", subTopics: [
+                        { text: "Understanding Composer as the dependency manager for PHP.", url: "https://getcomposer.org/doc/00-intro.md" },
+                        { text: "The role of the `vendor/` directory and the `composer.lock` file.", url: "https://getcomposer.org/doc/01-basic-usage.md" }
+                    ]},
+                    { main: "The `composer.json` File", subTopics: [
+                        { text: "Defining project metadata and required package dependencies.", url: "https://getcomposer.org/doc/01-basic-usage.md#composer-json-project-setup" },
+                        { text: "The difference between `require` and `require-dev`.", url: "https://getcomposer.org/doc/04-schema.md#require" }
+                    ]},
+                    { main: "Using Autoloading", subTopics: [
+                        { text: "The `require 'vendor/autoload.php';` statement to enable automatic class loading for all packages.", url: "https://getcomposer.org/doc/01-basic-usage.md#autoloading" }
+                    ]}
+                ], 
+                project: "Manually create a basic `composer.json` file. Pretend to install a package (e.g., `psr/log`). Write a PHP script that includes **`vendor/autoload.php`** (simulate installation) and prints a confirmation message." 
+            },
+            { 
+                day: 27, 
+                topic: "RESTful API Concepts & JSON", 
+                concepts: [
+                    { main: "Introduction to REST", subTopics: [
+                        { text: "Representational State Transfer and the concept of resources.", url: "https://restfulapi.net/" },
+                        { text: "Mapping CRUD operations to HTTP methods: GET (Read), POST (Create), PUT/PATCH (Update), DELETE (Delete).", url: "https://www.w3schools.com/tags/ref_httpmethods.asp" }
+                    ]},
+                    { main: "Working with JSON", subTopics: [
+                        { text: "Converting PHP arrays/objects to JSON using `json_encode()`.", url: "https://www.w3schools.com/php/func_json_encode.asp" },
+                        { text: "Converting JSON strings to PHP data structures using `json_decode()`.", url: "https://www.w3schools.com/php/func_json_decode.asp" }
+                    ]},
+                    { main: "Setting HTTP Headers", subTopics: [
+                        { text: "Using the `header()` function to set the response type (e.g., `Content-Type: application/json`).", url: "https://www.php.net/manual/en/function.header.php" }
+                    ]}
+                ], 
+                project: "Create a script that checks the `\$_SERVER['REQUEST_METHOD']`. If **GET**, set the header to JSON and `json_encode()` an array of mock users. If **POST**, `json_decode()` the incoming raw request body." 
+            },
+            { 
+                day: 28, 
+                topic: "Introduction to MVC Pattern", 
+                concepts: [
+                    { main: "The MVC Goal", subTopics: [
+                        { text: "Separation of concerns: dividing an application into three interconnected parts for maintainability.", url: "https://www.w3schools.com/php/php_mvc.asp" },
+                        { text: "Understanding the flow of a request: Controller -> Model -> Controller -> View.", url: "https://www.geeksforgeeks.org/mvc-architecture-in-php/" }
+                    ]},
+                    { main: "Model (Data Layer)", subTopics: [
+                        { text: "Handling all database interactions (reading, writing) and business logic related to data.", url: "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" }
+                    ]},
+                    { main: "View (Presentation Layer)", subTopics: [
+                        { text: "Containing only HTML and simple output logic (no complex business logic or DB calls).", url: "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" }
+                    ]},
+                    { main: "Controller (Logic Layer)", subTopics: [
+                        { text: "Processing user input, calling Model methods, and deciding which View to render.", url: "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" }
+                    ]}
+                ], 
+                project: "Take your existing **BMI Calculator Function** (Day 8). Restructure it into three separate conceptual parts: `BMI_Model.php` (calculation function), `BMI_Controller.php` (input handling/calling Model), and `BMI_View.html` (displaying the result)." 
+            },
+            { 
+                day: 29, 
+                topic: "Basic Routing & Controllers", 
+                concepts: [
+                    { main: "The Front Controller Pattern", subTopics: [
+                        { text: "Using a single entry point (`index.php`) for all requests to centralize traffic handling.", url: "https://www.php-fig.org/psr/psr-7/" },
+                        { text: "URL rewriting with `.htaccess` to direct all requests to `index.php`.", url: "https://www.php.net/manual/en/configuration.apache.php" }
+                    ]},
+                    { main: "Manual Routing", subTopics: [
+                        { text: "Analyzing the request URI (`\$_SERVER['REQUEST_URI']`) to determine the requested page/controller.", url: "https://www.php.net/manual/en/reserved.variables.server.php" },
+                        { text: "Using a simple `switch` statement on the URI to load the correct controller/logic.", url: "https://en.wikipedia.org/wiki/Front_controller" }
+                    ]},
+                    { main: "Controller Loading", subTopics: [
+                        { text: "Instantiating and calling methods on a controller class based on the route match.", url: "https://www.w3schools.com/php/php_mvc.asp" }
+                    ]}
+                ], 
+                project: "Implement a basic **Router**. In `index.php`, check the request path. If `/`, instantiate and call `index()` on a `HomeController`. If `/about`, call `show()` on an `AboutController`. Print a message from each controller." 
+            },
+            { 
+                day: 30, 
+                topic: "Project: Simple Guestbook App", 
+                concepts: [
+                    { main: "Full-Stack Integration", subTopics: [
+                        { text: "Combining HTML forms (Day 10), validation, database (Day 21), and display (Day 20) into a single working application.", url: "https://www.w3schools.com/php/php_forms.asp" },
+                        { text: "Focus on clean separation of PHP logic from HTML presentation.", url: "https://www.php.net/manual/en/tutorial.firstpage.php" }
+                    ]},
+                    { main: "Refinement and Cleanup", subTopics: [
+                        { text: "Reviewing code for security best practices (PDO, htmlspecialchars).", url: "https://www.w3schools.com/php/php_security.asp" },
+                        { text: "Ensuring all resource (database connection, files) are properly closed.", url: "https://www.php.net/manual/en/function.fclose.php" }
+                    ]},
+                    { main: "Next Steps", subTopics: [
+                        { text: "The path toward using a real PHP framework (Laravel, Symfony) for enterprise-level development.", url: "https://www.php.net/manual/en/faq.databases.php" }
+                    ]}
+                ], 
+                project: "Complete the **Simple Guestbook Application**. Build one page that shows a form for submitting Name and Message. Upon submission (POST), save the data securely to your database (PDO/INSERT). Finally, fetch and display all existing entries above the form." 
+            }
+        ];
+
+        // --- CORE JAVASCRIPT FUNCTIONS ---
+
+        // Helper function to generate concept links for UI
+        function createConceptHtml(concepts) {
+            let html = '';
+            concepts.forEach(concept => {
+                html += `
+                    <div class="mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm">
+                        <h4 class="text-lg font-semibold text-indigo-700">${concept.main}</h4>
+                        <ul class="list-disc ml-5 mt-2 space-y-1 text-sm">`;
+                
+                concept.subTopics.forEach(sub => {
+                    html += `
+                        <li class="pl-1">
+                            <a href="${sub.url}" target="_blank" class="text-indigo-600 hover:text-indigo-800 hover:underline transition duration-150 ease-in-out font-medium">
+                                ${sub.text}
+                            </a>
+                        </li>`;
+                });
+
+                html += `</ul></div>`;
+            });
+            return html;
+        }
+
+        // Function to load and display content for a specific day
+        function loadDayContent(dayNumber) {
+            // Find the data for the selected day
+            const dayData = curriculum.find(day => day.day === dayNumber);
+            if (!dayData) {
+                console.error("Day data not found for day:", dayNumber);
+                return;
+            }
+
+            // Show loading indicator briefly (for effect)
+            document.getElementById('content-display').classList.add('hidden');
+            document.getElementById('loading-indicator').classList.remove('hidden');
+
+            // Update sidebar active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('bg-indigo-600', 'font-bold');
+                link.classList.add('hover:bg-indigo-600');
+            });
+            const activeLink = document.getElementById(`nav-day-${dayNumber}`);
+            if (activeLink) {
+                activeLink.classList.add('bg-indigo-600', 'font-bold');
+                activeLink.classList.remove('hover:bg-indigo-600');
+            }
+
+            setTimeout(() => {
+                // Update Main Content Headers
+                document.getElementById('day-number-title').textContent = dayData.day;
+                document.getElementById('day-topic-title').textContent = dayData.topic;
+
+                // Update Concepts
+                document.getElementById('main-concepts').innerHTML = createConceptHtml(dayData.concepts);
+
+                // Update Mini Project
+                document.getElementById('mini-project').textContent = dayData.project;
+
+                // Hide loading and show content
+                document.getElementById('loading-indicator').classList.add('hidden');
+                document.getElementById('content-display').classList.remove('hidden');
+
+                // Reset scroll position of the main content area
+                document.getElementById('main-content').scrollTop = 0;
+            }, 300); // Small delay for visual transition
+        }
+
+        // Function to generate the sidebar navigation links
+        function generateNav() {
+            const container = document.getElementById('nav-links-container');
+            let navHtml = '';
+
+            curriculum.forEach(dayItem => {
+                navHtml += `
+                    <a href="#" id="nav-day-${dayItem.day}" 
+                       class="nav-link block p-3 text-sm border-b border-indigo-600 hover:bg-indigo-600 transition duration-150 ease-in-out" 
+                       data-day="${dayItem.day}">
+                        <span class="font-bold mr-1">Day ${dayItem.day}:</span> ${dayItem.topic}
+                    </a>
+                `;
+            });
+
+            container.innerHTML = navHtml;
+
+            // Attach event listeners to all generated links
+            container.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dayNumber = parseInt(e.currentTarget.getAttribute('data-day'));
+                    loadDayContent(dayNumber);
+                });
+            });
+        }
+
+        // Initialize the page
+        window.onload = function() {
+            generateNav();
+            // Load content for Day 1 initially
+            loadDayContent(1); 
+        };
+    </script>
+</body>
+</html>

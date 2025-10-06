@@ -7,6 +7,13 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* --- CRITICAL LAYOUT FIXES FOR FIXED ELEMENTS --- */
+        /* Lock the browser's main scrollbar and set full height */
+        html, body {
+            height: 100%;
+            overflow: hidden; 
+        }
+
         /* Custom scrollbar styling for the sidebar for a cleaner look */
         .sidebar-nav::-webkit-scrollbar {
             width: 6px;
@@ -26,50 +33,58 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
-    <!-- The 'sm:flex-row' class engages the side-by-side layout on smaller screens. -->
-    <div class="min-h-screen flex flex-col sm:flex-row">
+    <!-- Main Container: Now uses h-full to occupy 100% of the locked body height -->
+    <div class="h-full flex flex-col sm:flex-row">
 
-        <!-- Sidebar Navigation (Left Side) -->
-        <nav id="sidebar" class="w-full sm:w-64 bg-indigo-700 text-white shadow-xl flex-shrink-0">
-            <div class="p-5 border-b border-indigo-600">
+        <!-- Sidebar Navigation (Left Side): Set to full height and flex-column to stack elements -->
+        <div id="sidebar" class="w-full sm:w-64 bg-indigo-700 text-white shadow-xl flex-shrink-0 h-full flex flex-col">
+            
+            <!-- FIXED Header of the Sidebar (flex-shrink-0 to lock height) -->
+            <div class="p-5 border-b border-indigo-600 flex-shrink-0">
                 <h1 class="text-2xl font-extrabold tracking-tight">Python 30-Day Plan</h1>
                 <p class="text-sm text-indigo-200">Select a day to view details</p>
             </div>
-            <div id="nav-links-container" class="sidebar-nav h-full overflow-y-auto pb-4">
+
+            <!-- Scrollable links Container: flex-grow takes remaining height, overflow-y-auto makes it scrollable -->
+            <div id="nav-links-container" class="sidebar-nav flex-grow overflow-y-auto pb-4">
                 <!-- Navigation links will be injected here by JavaScript -->
             </div>
-        </nav>
+        </div>
 
-        <!-- Main Content Area (Right Side) -->
-        <main id="main-content" class="flex-grow p-6 sm:p-10 lg:p-12">
+        <!-- Main Content Area (Right Side): Set to full height, hides overflow, and is a flex-column -->
+        <main id="main-content" class="flex-grow p-6 sm:p-10 lg:p-12 h-full overflow-y-hidden flex flex-col">
 
-            <!-- Title and Loader -->
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">Day <span id="day-number-title">1</span>: <span id="day-topic-title">Loading...</span></h2>
-                <div id="loading-indicator" class="hidden text-center p-8">
-                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500 mx-auto"></div>
-                    <p class="mt-3 text-gray-600">Loading details...</p>
+            <div class="max-w-4xl mx-auto w-full h-full flex flex-col">
+                <!-- FIXED Title and Loader (flex-shrink-0 to lock height) -->
+                <div class="flex-shrink-0">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">Day <span id="day-number-title">1</span>: <span id="day-topic-title">Loading...</span></h2>
+                    <div id="loading-indicator" class="hidden text-center p-8">
+                        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500 mx-auto"></div>
+                        <p class="mt-3 text-gray-600">Loading details...</p>
+                    </div>
                 </div>
 
-                <!-- Content Area -->
-                <div id="content-display" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200">
+                <!-- Scrollable Content Wrapper: flex-grow takes remaining space, overflow-y-auto makes it scrollable -->
+                <div id="content-scroll-wrapper" class="flex-grow overflow-y-auto">
+                    <div id="content-display" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200 min-h-full">
 
-                    <!-- Main Topic -->
-                    <section class="mb-8">
-                        <h3 class="text-xl sm:text-2xl font-semibold text-indigo-600 mb-3 border-b pb-2">Main Concepts (Click to Learn)</h3>
-                        <div id="main-concepts" class="text-gray-700 leading-relaxed">
-                            <!-- Structured concepts content will be injected here -->
-                        </div>
-                    </section>
+                        <!-- Main Topic -->
+                        <section class="mb-8">
+                            <h3 class="text-xl sm:text-2xl font-semibold text-indigo-600 mb-3 border-b pb-2">Main Concepts (Click to Learn)</h3>
+                            <div id="main-concepts" class="text-gray-700 leading-relaxed">
+                                <!-- Structured concepts content will be injected here -->
+                            </div>
+                        </section>
 
-                    <!-- Mini Project -->
-                    <section>
-                        <h3 class="text-xl sm:text-2xl font-semibold text-green-600 mb-3 border-b pb-2">Mini-Project Challenge</h3>
-                        <p id="mini-project" class="text-gray-700 leading-relaxed font-medium">
-                            <!-- Project content will be injected here -->
-                        </p>
-                    </section>
-                </div>
+                        <!-- Mini Project -->
+                        <section>
+                            <h3 class="text-xl sm:text-2xl font-semibold text-green-600 mb-3 border-b pb-2">Mini-Project Challenge</h3>
+                            <p id="mini-project" class="text-gray-700 leading-relaxed font-medium">
+                                <!-- Project content will be injected here -->
+                            </p>
+                        </section>
+                    </div>
+                </div> 
             </div>
         </main>
     </div>
@@ -659,6 +674,12 @@
             // Simple loading simulation
             contentDisplay.classList.add('opacity-0');
             loadingIndicator.classList.remove('hidden');
+
+            // Find the correct content display element and scroll it to the top
+            const contentWrapper = document.getElementById('content-scroll-wrapper');
+            if (contentWrapper) {
+                contentWrapper.scrollTop = 0;
+            }
 
             setTimeout(() => {
                 if (selectedDay) {
